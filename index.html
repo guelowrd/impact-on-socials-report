@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardian Campaign Impact</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf9; --card: #ffffff; --border: #e7e5e4; --border-l: #d6d3d1;
+    --text: #1c1917; --dim: #57534e; --muted: #a8a29e;
+    --green: #15803d; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+    --red: #b91c1c; --red-bg: #fef2f2; --red-border: #fecaca;
+    --blue: #1d4ed8; --blue-bg: #eff6ff;
+    --amber: #92400e; --amber-bg: #fffbeb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 40px 24px; max-width: 820px; margin: 0 auto; }
+
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 2px; }
+  .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+
+  h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dim); margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 15px; font-weight: 600; margin: 20px 0 8px; }
+
+  .stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; flex: 1; min-width: 130px; }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 3px; }
+  .stat-value { font-size: 22px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
+  .stat-sub { font-size: 11px; margin-top: 2px; }
+  .stat-sub.up { color: var(--green); }
+  .stat-sub.down { color: var(--red); }
+  .stat-sub.neutral { color: var(--dim); }
+
+  .callout { border-radius: 8px; padding: 16px 18px; margin: 16px 0; font-size: 14px; line-height: 1.65; }
+  .callout.green { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .callout.red { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .callout.blue { background: var(--blue-bg); border: 1px solid #bfdbfe; }
+  .callout.amber { background: var(--amber-bg); border: 1px solid #fde68a; }
+  .callout strong { font-weight: 600; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th { text-align: left; padding: 8px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; border-bottom: 2px solid var(--border); }
+  th:not(:first-child) { text-align: right; }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
+  td:not(:first-child) { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  tr.highlight { background: var(--green-bg); }
+  tr.highlight td:first-child { font-weight: 600; color: var(--green); }
+
+  .bar-chart { margin: 12px 0; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .bar-label { width: 40px; font-size: 11px; color: var(--muted); text-align: right; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; }
+  .bar-track { flex: 1; height: 22px; background: #f5f5f4; border-radius: 4px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .bar-val { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--dim); width: 30px; text-align: right; flex-shrink: 0; }
+  .bar-fill.green { background: linear-gradient(90deg, #86efac, #22c55e); }
+  .bar-fill.blue { background: linear-gradient(90deg, #93c5fd, #3b82f6); }
+  .bar-fill.amber { background: linear-gradient(90deg, #fcd34d, #f59e0b); }
+  .bar-fill.red { background: linear-gradient(90deg, #fca5a5, #ef4444); }
+  .bar-fill.default { background: linear-gradient(90deg, #d6d3d1, #a8a29e); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  .demo-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .demo-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 10px; }
+  .demo-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 12px; }
+  .demo-row .name { color: var(--dim); }
+  .demo-row .val { font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+  .demo-row .badge { font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 500; }
+  .badge.up { background: var(--green-bg); color: var(--green); }
+  .badge.same { background: #f5f5f4; color: var(--dim); }
+
+  .prose { font-size: 14px; color: var(--dim); line-height: 1.7; margin: 10px 0; }
+  .prose strong { color: var(--text); font-weight: 600; }
+
+  .section-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: -8px; margin-bottom: 14px; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.03em; margin-right: 4px; }
+  .tag.g { background: var(--green-bg); color: var(--green); }
+  .tag.b { background: var(--blue-bg); color: var(--blue); }
+
+  .toc { display: flex; gap: 0; margin-bottom: 32px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .toc a { flex: 1; display: flex; align-items: center; gap: 8px; padding: 12px 14px; text-decoration: none; color: var(--dim); font-size: 13px; font-weight: 500; border-right: 1px solid var(--border); transition: background 0.15s; }
+  .toc a:last-child { border-right: none; }
+  .toc a:hover { background: #f5f5f4; }
+  .toc .toc-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; }
+  @media (max-width: 600px) { .toc { flex-direction: column; } .toc a { border-right: none; border-bottom: 1px solid var(--border); } .toc a:last-child { border-bottom: none; } }
+
+  .hbar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .hbar-name { width: 100px; font-size: 11px; color: var(--dim); text-align: right; flex-shrink: 0; }
+  .hbar-track { flex: 1; height: 20px; background: #f5f5f4; border-radius: 4px; overflow: hidden; position: relative; }
+  .hbar-fill { height: 100%; border-radius: 4px; }
+  .hbar-val { position: absolute; right: 6px; top: 2px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: var(--text); }
+  .hbar-fill.cyan { background: linear-gradient(90deg, #a5f3fc, #06b6d4); }
+  .hbar-fill.amber { background: linear-gradient(90deg, #fde68a, #f59e0b); }
+</style>
+</head>
+<body>
+
+<h1>Guardian Campaign: Impact on Social</h1>
+<div class="subtitle">Apr 20 – 30, 2026 · Data through May 14 · X + LinkedIn</div>
+
+<nav class="toc">
+  <a href="#topline"><span class="toc-num">01</span>Top-Line Numbers</a>
+  <a href="#x"><span class="toc-num">02</span>X / Twitter</a>
+  <a href="#linkedin"><span class="toc-num">03</span>LinkedIn</a>
+  <a href="#conclusions"><span class="toc-num">04</span>Conclusions</a>
+</nav>
+
+<!-- ============ TOP-LINE ============ -->
+<h2 id="topline">Top-Line Numbers</h2>
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">X Followers</div>
+    <div class="stat-value">+866</div>
+    <div class="stat-sub up">vs −1,185 prior 64 days</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">X Avg Imp / Tweet</div>
+    <div class="stat-value">6,048</div>
+    <div class="stat-sub up">2× vs pre-launch (3,083)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">X Link Clicks</div>
+    <div class="stat-value">306</div>
+    <div class="stat-sub up">7.3× vs pre (42)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">LI Followers</div>
+    <div class="stat-value">+50</div>
+    <div class="stat-sub up">4.5/day vs 2.1 baseline</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">LI Daily Imp</div>
+    <div class="stat-value">207</div>
+    <div class="stat-sub up">+47% vs baseline (141)</div>
+  </div>
+</div>
+
+<div class="callout green">
+  <strong>The single most important number:</strong> Miden's X account was bleeding ~19 followers/day in the weeks before launch (38,242 on Mar 15 → 36,609 on Apr 19). The Guardian campaign reversed this to +79/day over 11 days. That's a ~2,050 follower swing. Nothing else the account has done in this period achieved that.
+</div>
+
+<!-- ============ X DEEP DIVE ============ -->
+<h2 id="x">X / Twitter</h2>
+
+<h3>Period Comparison (tweet-level)</h3>
+<p class="section-note">Pre-Guardian = 30 days before launch (Mar 20 – Apr 19)</p>
+
+<table>
+  <thead>
+    <tr><th>Period</th><th>Tweets</th><th>Avg Imp</th><th>Med Imp</th><th>Avg ER</th><th>Link Clicks</th><th>Bookmarks</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pre-Guardian<br><span style="font-size:10px;color:var(--muted)">Mar 20 – Apr 19</span></td><td>66</td><td>3,083</td><td>1,807</td><td>3.5%</td><td>42</td><td>111</td></tr>
+    <tr class="highlight"><td>Guardian campaign<br><span style="font-size:10px;color:var(--green)">Apr 20 – 30</span></td><td>28</td><td>6,048</td><td>2,064</td><td>3.3%</td><td>306</td><td>133</td></tr>
+    <tr><td>Post-Guardian<br><span style="font-size:10px;color:var(--muted)">May 1 – 14</span></td><td>25</td><td>4,390</td><td>2,173</td><td>3.4%</td><td>77</td><td>77</td></tr>
+  </tbody>
+</table>
+
+<h3>Account-Level Daily Averages</h3>
+<p class="section-note">From X analytics export (includes impressions on old tweets, not just new posts)</p>
+
+<table>
+  <thead>
+    <tr><th>Period</th><th>Daily Imp</th><th>Daily Eng</th><th>Daily Profile</th><th>Followers Δ</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pre-Guardian<br><span style="font-size:10px;color:var(--muted)">Feb 15 – Apr 19 (64d)</span></td><td>12,370</td><td>419</td><td>64</td><td style="color:var(--red)">−1,185</td></tr>
+    <tr class="highlight"><td>Guardian<br><span style="font-size:10px;color:var(--green)">Apr 20 – 30 (11d)</span></td><td>15,670</td><td>350</td><td>49</td><td style="color:var(--green)">+866</td></tr>
+    <tr><td>Post-Guardian<br><span style="font-size:10px;color:var(--muted)">May 1 – 14 (14d)</span></td><td>9,579</td><td>219</td><td>36</td><td>+59</td></tr>
+  </tbody>
+</table>
+
+<h3>X Follower Count: Weekly</h3>
+<div class="bar-chart">
+  <div class="bar-row"><div class="bar-label">02/22</div><div class="bar-track"><div class="bar-fill default" style="width:80%"></div></div><div class="bar-val">38,020</div></div>
+  <div class="bar-row"><div class="bar-label">03/01</div><div class="bar-track"><div class="bar-fill default" style="width:82%"></div></div><div class="bar-val">38,136</div></div>
+  <div class="bar-row"><div class="bar-label">03/08</div><div class="bar-track"><div class="bar-fill default" style="width:83%"></div></div><div class="bar-val">38,242</div></div>
+  <div class="bar-row"><div class="bar-label">03/15</div><div class="bar-track"><div class="bar-fill default" style="width:83%"></div></div><div class="bar-val">38,246</div></div>
+  <div class="bar-row"><div class="bar-label">03/22</div><div class="bar-track"><div class="bar-fill default" style="width:84%"></div></div><div class="bar-val">38,387</div></div>
+  <div class="bar-row"><div class="bar-label">03/29</div><div class="bar-track"><div class="bar-fill default" style="width:83%"></div></div><div class="bar-val">38,369</div></div>
+  <div class="bar-row"><div class="bar-label">04/05</div><div class="bar-track"><div class="bar-fill red" style="width:67%"></div></div><div class="bar-val">37,733</div></div>
+  <div class="bar-row"><div class="bar-label">04/12</div><div class="bar-track"><div class="bar-fill red" style="width:20%"></div></div><div class="bar-val">36,102</div></div>
+  <div class="bar-row"><div class="bar-label">04/19</div><div class="bar-track"><div class="bar-fill red" style="width:35%"></div></div><div class="bar-val">36,609</div></div>
+  <div class="bar-row"><div class="bar-label">04/26</div><div class="bar-track"><div class="bar-fill green" style="width:54%"></div></div><div class="bar-val">37,242</div></div>
+  <div class="bar-row"><div class="bar-label">05/03</div><div class="bar-track"><div class="bar-fill green" style="width:61%"></div></div><div class="bar-val">37,479</div></div>
+  <div class="bar-row"><div class="bar-label">05/10</div><div class="bar-track"><div class="bar-fill blue" style="width:63%"></div></div><div class="bar-val">37,558</div></div>
+  <div class="bar-row"><div class="bar-label">05/14</div><div class="bar-track"><div class="bar-fill blue" style="width:64%"></div></div><div class="bar-val">37,569</div></div>
+</div>
+<p class="prose" style="font-size:12px; margin-top: 4px;">
+  <span style="display:inline-block;width:10px;height:10px;background:#a8a29e;border-radius:2px;vertical-align:middle;margin-right:3px"></span> Pre-campaign
+  <span style="display:inline-block;width:10px;height:10px;background:#ef4444;border-radius:2px;vertical-align:middle;margin-left:12px;margin-right:3px"></span> Bleeding followers (−2,140 in 3 wks)
+  <span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px;vertical-align:middle;margin-left:12px;margin-right:3px"></span> Guardian campaign
+  <span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;vertical-align:middle;margin-left:12px;margin-right:3px"></span> Post-campaign
+</p>
+
+<div class="callout blue">
+  <strong>Context on the follower drop.</strong> The account lost ~2,140 followers between Mar 29 and Apr 12 (the weeks of Apr 5 and Apr 12 show −636 and −1,631). This likely reflects post-Kaito churn — community/incentive-driven followers leaving as those programs wound down. The Guardian campaign didn't just stop the bleeding; it attracted net-new followers at a rate of +79/day.
+</div>
+
+<h3>Weekly Impressions (account-level)</h3>
+<div class="bar-chart">
+  <div class="bar-row"><div class="bar-label">02/22</div><div class="bar-track"><div class="bar-fill default" style="width:93%"></div></div><div class="bar-val">171K</div></div>
+  <div class="bar-row"><div class="bar-label">03/01</div><div class="bar-track"><div class="bar-fill default" style="width:67%"></div></div><div class="bar-val">123K</div></div>
+  <div class="bar-row"><div class="bar-label">03/08</div><div class="bar-track"><div class="bar-fill default" style="width:30%"></div></div><div class="bar-val">56K</div></div>
+  <div class="bar-row"><div class="bar-label">03/15</div><div class="bar-track"><div class="bar-fill default" style="width:100%"></div></div><div class="bar-val">184K</div></div>
+  <div class="bar-row"><div class="bar-label">03/22</div><div class="bar-track"><div class="bar-fill default" style="width:23%"></div></div><div class="bar-val">43K</div></div>
+  <div class="bar-row"><div class="bar-label">03/29</div><div class="bar-track"><div class="bar-fill default" style="width:57%"></div></div><div class="bar-val">105K</div></div>
+  <div class="bar-row"><div class="bar-label">04/05</div><div class="bar-track"><div class="bar-fill default" style="width:23%"></div></div><div class="bar-val">43K</div></div>
+  <div class="bar-row"><div class="bar-label">04/12</div><div class="bar-track"><div class="bar-fill default" style="width:18%"></div></div><div class="bar-val">33K</div></div>
+  <div class="bar-row"><div class="bar-label">04/19</div><div class="bar-track"><div class="bar-fill red" style="width:7%"></div></div><div class="bar-val">14K</div></div>
+  <div class="bar-row"><div class="bar-label">04/26</div><div class="bar-track"><div class="bar-fill green" style="width:67%"></div></div><div class="bar-val">123K</div></div>
+  <div class="bar-row"><div class="bar-label">05/03</div><div class="bar-track"><div class="bar-fill green" style="width:40%"></div></div><div class="bar-val">74K</div></div>
+  <div class="bar-row"><div class="bar-label">05/10</div><div class="bar-track"><div class="bar-fill blue" style="width:21%"></div></div><div class="bar-val">39K</div></div>
+  <div class="bar-row"><div class="bar-label">05/17</div><div class="bar-track"><div class="bar-fill blue" style="width:38%"></div></div><div class="bar-val">70K</div></div>
+</div>
+
+<hr class="divider">
+
+<!-- ============ LINKEDIN ============ -->
+<h2 id="linkedin">LinkedIn</h2>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Daily Impressions</div>
+    <div class="stat-value">207</div>
+    <div class="stat-sub up">+47% vs baseline (141)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Daily Reactions</div>
+    <div class="stat-value">9.0</div>
+    <div class="stat-sub up">+55% vs baseline (5.8)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">New Followers / Day</div>
+    <div class="stat-value">4.5</div>
+    <div class="stat-sub up">2.1× baseline (2.1/day)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Page Views / Day</div>
+    <div class="stat-value">26.5</div>
+    <div class="stat-sub down">−16% vs baseline (31.7)</div>
+  </div>
+</div>
+
+<h3>Daily New Followers (Apr – May 12)</h3>
+<div class="bar-chart" id="li-followers">
+  <!-- Generated inline for portability -->
+</div>
+<script>
+  const fData = [
+    ["4/1",4],["4/2",0],["4/3",3],["4/4",2],["4/5",0],["4/6",5],["4/7",2],["4/8",3],["4/9",0],["4/10",2],
+    ["4/11",1],["4/12",2],["4/13",3],["4/14",0],["4/15",1],["4/16",2],["4/17",0],["4/18",2],["4/19",1],["4/20",1],
+    ["4/21",3],["4/22",2],["4/23",12],["4/24",13],["4/25",4],["4/26",2],["4/27",3],["4/28",2],["4/29",5],["4/30",3],
+    ["5/1",0],["5/2",1],["5/3",0],["5/4",2],["5/5",1],["5/6",1],["5/7",1],["5/8",1],["5/9",1],["5/10",4],["5/11",0],["5/12",3]
+  ];
+  const container = document.getElementById('li-followers');
+  fData.forEach(([d, v]) => {
+    const isSpike = v >= 10;
+    const isGuardian = d >= "4/20" && d <= "4/30";
+    const color = isSpike ? '#22c55e' : (isGuardian ? '#86efac' : '#d6d3d1');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:4px;margin-bottom:2px;';
+    row.innerHTML = `
+      <span style="width:32px;font-size:9px;color:#a8a29e;text-align:right;font-family:'IBM Plex Mono',monospace;flex-shrink:0">${d}</span>
+      <div style="flex:1;height:${isSpike?18:14}px;display:flex;align-items:center">
+        <div style="width:${Math.max(v * 7, v > 0 ? 3 : 0)}%;height:100%;background:${color};border-radius:2px;min-width:${v>0?3:0}px"></div>
+      </div>
+      <span style="width:18px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:${isSpike?'#15803d':'#57534e'};font-weight:${isSpike?600:400};text-align:right">${v}</span>
+    `;
+    container.appendChild(row);
+  });
+</script>
+
+<div class="prose" style="font-size: 12px; color: var(--muted); margin-top: 6px;">
+  <strong style="color: var(--green);">Apr 23–24: +12 and +13 new followers</strong> — 5–6× the daily average of ~2. Coincides with the "privacy + coordination" post and quote video. May returned to ~1/day baseline.
+</div>
+
+<h3>Audience: Visitors vs Followers</h3>
+<p class="section-note">Visitors = who checks the page (broader). Followers = who converted. Side-by-side comparison reveals conversion gaps.</p>
+
+<div class="two-col">
+  <div class="demo-card">
+    <div class="demo-title">Industry — Followers</div>
+    <div class="hbar-row"><div class="hbar-name">Software Dev</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:100%"></div><span class="hbar-val">134</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">IT Services</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:87%"></div><span class="hbar-val">116</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Tech / Internet</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:79%"></div><span class="hbar-val">106</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Financial Svc</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:69%"></div><span class="hbar-val" style="color:var(--dim)">93 · #4</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Blockchain</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:66%"></div><span class="hbar-val">89</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Industry — Visitors</div>
+    <div class="hbar-row"><div class="hbar-name">Blockchain</div><div class="hbar-track"><div class="hbar-fill amber" style="width:100%"></div><span class="hbar-val">358</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Financial Svc</div><div class="hbar-track"><div class="hbar-fill amber" style="width:99%"></div><span class="hbar-val" style="color:var(--green);font-weight:600">355 · #2</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Software Dev</div><div class="hbar-track"><div class="hbar-fill amber" style="width:95%"></div><span class="hbar-val">340</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">IT Services</div><div class="hbar-track"><div class="hbar-fill amber" style="width:86%"></div><span class="hbar-val">307</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Tech / Internet</div><div class="hbar-track"><div class="hbar-fill amber" style="width:84%"></div><span class="hbar-val">302</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Job Function — Followers</div>
+    <div class="hbar-row"><div class="hbar-name">Business Dev</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:100%"></div><span class="hbar-val">192</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Engineering</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:89%"></div><span class="hbar-val">170</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Marketing</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:34%"></div><span class="hbar-val">65</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">HR</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:25%"></div><span class="hbar-val">48</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Sales</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:22%"></div><span class="hbar-val">42</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Job Function — Visitors</div>
+    <div class="hbar-row"><div class="hbar-name">Business Dev</div><div class="hbar-track"><div class="hbar-fill amber" style="width:100%"></div><span class="hbar-val">644</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Engineering</div><div class="hbar-track"><div class="hbar-fill amber" style="width:46%"></div><span class="hbar-val">293</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Marketing</div><div class="hbar-track"><div class="hbar-fill amber" style="width:29%"></div><span class="hbar-val">187</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Sales</div><div class="hbar-track"><div class="hbar-fill amber" style="width:28%"></div><span class="hbar-val">181</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">HR</div><div class="hbar-track"><div class="hbar-fill amber" style="width:21%"></div><span class="hbar-val">132</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Seniority — Followers</div>
+    <div class="hbar-row"><div class="hbar-name">Senior</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:100%"></div><span class="hbar-val">312</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Entry</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:76%"></div><span class="hbar-val">237</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Director</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:28%"></div><span class="hbar-val">88</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Owner</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:27%"></div><span class="hbar-val">85</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">CXO</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:18%"></div><span class="hbar-val" style="color:var(--dim)">57 · 6.5%</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Seniority — Visitors</div>
+    <div class="hbar-row"><div class="hbar-name">Senior</div><div class="hbar-track"><div class="hbar-fill amber" style="width:100%"></div><span class="hbar-val">781</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Entry</div><div class="hbar-track"><div class="hbar-fill amber" style="width:94%"></div><span class="hbar-val">732</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Director</div><div class="hbar-track"><div class="hbar-fill amber" style="width:34%"></div><span class="hbar-val">265</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Owner</div><div class="hbar-track"><div class="hbar-fill amber" style="width:25%"></div><span class="hbar-val">198</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">CXO</div><div class="hbar-track"><div class="hbar-fill amber" style="width:23%"></div><span class="hbar-val" style="color:var(--green);font-weight:600">181 · 7.5%</span></div></div>
+  </div>
+</div>
+
+<div class="callout amber" style="margin-top: 16px;">
+  <strong>Financial Services is #4 among followers but #2 among visitors.</strong> The target audience is checking the page — they're not converting to followers at the same rate. Blockchain Services jumps from #5 (followers) to #1 (visitors). CXO representation is proportionally higher among visitors (7.5%) than followers (6.5%). The content is reaching the right people; the page itself needs to close the follow.
+</div>
+
+<hr class="divider">
+
+<!-- ============ CONCLUSIONS ============ -->
+<h2 id="conclusions">Conclusions</h2>
+
+<div class="callout green">
+  <strong>What the campaign achieved:</strong><br>
+  • Reversed a 64-day follower bleed (−1,185) into 11 days of net growth (+866) on X<br>
+  • 2× avg impressions per tweet vs the prior 30-day baseline<br>
+  • 7.3× link click volume — the strongest intent signal in the dataset<br>
+  • 2.1× LinkedIn follower growth rate, with a concentrated spike on Apr 23–24 (+25 in 2 days)<br>
+  • +47% daily LinkedIn impressions during the window<br>
+  • Sustained lift: post-Guardian May is still running above the pre-launch trough on both platforms
+</div>
+
+<div class="callout red">
+  <strong>What it didn't do:</strong><br>
+  • LinkedIn page views actually dipped slightly during the campaign (26.5/day vs 31.7 baseline) — the content drove feed engagement but not page traffic<br>
+  • Post-campaign May returned to baseline quickly on both platforms (~1 LI follower/day, ~4.4K avg imp/tweet). The campaign created a burst, not a permanent step-change<br>
+  • X engagement rate during Guardian (3.3%) was slightly below the pre-period (3.5%) — the campaign reached more people but didn't engage them at a higher rate per impression
+</div>
+
+<div class="callout amber" style="margin-top: 16px;">
+  <strong>For the Wallet campaign:</strong> the Guardian data shows that narrative campaigns on X can reverse follower trends and generate outsized link click volume, but the effect is time-bound. The Wallet push should aim for a similar 10–14 day concentrated window. The mainnet tease created a warm audience — launching within the next 1–2 weeks rides that attention rather than starting cold.
+</div>
+
+</body>
+</html>
