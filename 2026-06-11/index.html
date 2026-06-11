@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardian Campaign — End-of-Campaign Review</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf9; --card: #fff; --border: #e7e5e4;
+    --text: #1c1917; --dim: #57534e; --muted: #a8a29e;
+    --green: #15803d; --green-bg: #f0fdf4;
+    --red: #b91c1c; --red-bg: #fef2f2;
+    --amber: #92400e; --amber-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 36px 24px; max-width: 780px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 2px; }
+  .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dim); margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 14px; font-weight: 600; margin: 18px 0 8px; }
+  .toc { display: flex; gap: 0; margin-bottom: 24px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .toc a { flex: 1; display: flex; align-items: center; gap: 8px; padding: 11px 14px; text-decoration: none; color: var(--dim); font-size: 13px; font-weight: 500; border-right: 1px solid var(--border); }
+  .toc a:last-child { border-right: none; }
+  .toc a:hover { background: #f5f5f4; }
+  .toc-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; }
+  @media (max-width: 600px) { .toc { flex-direction: column; } .toc a { border-right: none; border-bottom: 1px solid var(--border); } .toc a:last-child { border-bottom: none; } }
+  .stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; flex: 1; min-width: 130px; }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 3px; }
+  .stat-value { font-size: 22px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
+  .stat-sub { font-size: 11px; margin-top: 2px; color: var(--dim); }
+  .stat-sub.up { color: var(--green); }
+  .stat-sub.down { color: var(--red); }
+  .callout { border-radius: 8px; padding: 14px 16px; margin: 12px 0; font-size: 13.5px; line-height: 1.6; }
+  .callout.green { background: var(--green-bg); border: 1px solid #bbf7d0; }
+  .callout.red { background: var(--red-bg); border: 1px solid #fecaca; }
+  .callout.amber { background: var(--amber-bg); border: 1px solid #fde68a; }
+  .callout strong { font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; }
+  th { text-align: left; padding: 8px 9px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; border-bottom: 2px solid var(--border); }
+  th:not(:first-child) { text-align: right; }
+  td { padding: 8px 9px; border-bottom: 1px solid var(--border); }
+  td:not(:first-child) { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  tr.highlight { background: #fef3c7; }
+  tr.highlight td:first-child { font-weight: 600; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .demo-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .demo-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 9px; }
+  .hbar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .hbar-name { width: 100px; font-size: 11px; color: var(--dim); text-align: right; flex-shrink: 0; }
+  .hbar-track { flex: 1; height: 18px; background: #f5f5f4; border-radius: 4px; overflow: hidden; position: relative; }
+  .hbar-fill { height: 100%; border-radius: 4px; }
+  .hbar-val { position: absolute; right: 6px; top: 1px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: var(--text); }
+  .hbar-fill.cyan { background: linear-gradient(90deg, #a5f3fc, #06b6d4); }
+  .hbar-fill.amber { background: linear-gradient(90deg, #fde68a, #f59e0b); }
+  ul.tight { padding-left: 18px; margin: 6px 0; }
+  ul.tight li { margin-bottom: 5px; font-size: 13.5px; color: var(--dim); line-height: 1.55; }
+  ul.tight li strong { color: var(--text); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+</style>
+</head>
+<body>
+
+<h1>Guardian Campaign — End-of-Campaign Review</h1>
+<div class="subtitle">Campaign: <strong>Apr 23 – Jun 5, 2026 (44 days)</strong> · Bounded by "What is Guardian" article tweet → neobank "private efficient rails" tweet · Baseline: 30 days prior (Mar 24 – Apr 22)</div>
+
+<nav class="toc">
+  <a href="#topline"><span class="toc-num">01</span>Top-Line</a>
+  <a href="#x"><span class="toc-num">02</span>X</a>
+  <a href="#linkedin"><span class="toc-num">03</span>LinkedIn</a>
+  <a href="#lessons"><span class="toc-num">04</span>Lessons</a>
+</nav>
+
+<!-- ============ TOP-LINE ============ -->
+<h2 id="topline">Top-Line</h2>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">X impressions</div>
+    <div class="stat-value">600K</div>
+    <div class="stat-sub up">2.2× vs baseline (268K over 30d)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">X URL clicks</div>
+    <div class="stat-value">1,180</div>
+    <div class="stat-sub up">8.7× baseline (136)</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">X net follower Δ</div>
+    <div class="stat-value">−41</div>
+    <div class="stat-sub down">vs −203 baseline · slowed loss, no growth</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">LI new followers</div>
+    <div class="stat-value">+110</div>
+    <div class="stat-sub">2.5/day vs 2.7 baseline · flat</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">LI page views</div>
+    <div class="stat-value">23.7/d</div>
+    <div class="stat-sub down">−33% vs 35.2/d baseline</div>
+  </div>
+</div>
+
+<div class="callout amber">
+  <strong>Reach went up, conversion didn't.</strong> The campaign doubled X impressions and produced an 8.7× lift in link clicks — content broke through. But X followers still net-declined (just less steeply), and LinkedIn followers and page views were flat-to-down. The campaign won attention but didn't translate that attention into a larger audience.
+</div>
+
+<hr class="divider">
+
+<!-- ============ X ============ -->
+<h2 id="x">X</h2>
+
+<table>
+  <thead>
+    <tr><th>Period</th><th>Days</th><th>Tweets</th><th>Imp/tweet</th><th>URL clicks</th><th>Bookmarks</th><th>Net followers</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Baseline (Mar 24 – Apr 22)</td><td>30</td><td>81</td><td>3,314</td><td>136</td><td>184</td><td style="color:var(--red)">−203</td></tr>
+    <tr class="highlight"><td>Campaign (Apr 23 – Jun 5)</td><td>44</td><td>116</td><td>5,174</td><td>1,180</td><td>519</td><td style="color:var(--red)">−41</td></tr>
+  </tbody>
+</table>
+<p style="font-size:11px;color:var(--muted);margin-top:4px;">Net followers = (new follows − unfollows) from daily account-level data. Tweets/day was nearly identical: 2.7 baseline → 2.6 campaign.</p>
+
+<h3>Top campaign tweets (impressions)</h3>
+<table>
+  <thead><tr><th>Date</th><th>Tweet</th><th>Imp</th><th>URL</th><th>Bkmk</th></tr></thead>
+  <tbody>
+    <tr><td>04/23</td><td>"What is Guardian" article launch</td><td>54,165</td><td>84</td><td>45</td></tr>
+    <tr><td>05/11</td><td>Privacy Podcast — Azeem + Bobbin (mainnet tease)</td><td>40,760</td><td>32</td><td>13</td></tr>
+    <tr><td>05/11</td><td>"Testnet phase ending… mainnet soon"</td><td>25,612</td><td>0</td><td>25</td></tr>
+    <tr><td>05/01</td><td>Privacy Podcast Ep 3 — Wayne Chang / SpruceID</td><td>24,202</td><td>11</td><td>14</td></tr>
+    <tr><td>04/23</td><td>"Institutional chains will be private…" quote</td><td>24,167</td><td>49</td><td>6</td></tr>
+    <tr><td>06/02</td><td>Guardian operators announced (OZ, Lambda, Gateway)</td><td>21,325</td><td>0</td><td>18</td></tr>
+    <tr><td>05/27</td><td>"Three blockchains from Libra/Diem" thesis</td><td>18,163</td><td>70</td><td>13</td></tr>
+    <tr><td>04/30</td><td>"Privacy is not the same as anonymity"</td><td>15,752</td><td>0</td><td>4</td></tr>
+    <tr><td>05/18</td><td>"How a private tx with Guardian works" walkthrough</td><td>14,958</td><td>0</td><td>25</td></tr>
+    <tr><td>05/06</td><td>Wayne Chang clip — privacy-first identity</td><td>14,953</td><td>0</td><td>5</td></tr>
+  </tbody>
+</table>
+
+<div class="callout green">
+  <strong>What broke through:</strong> the launch article (54K), the mainnet tease (66K combined across two posts on May 11), the Operators announcement (21K), and explainer/walkthrough content (15K each). 7 of the top 10 tweets cleared 15K — far above the 5,174 campaign average — meaning a small number of moments did most of the work.
+</div>
+
+<h3>Top campaign tweets (URL clicks)</h3>
+<table>
+  <thead><tr><th>Date</th><th>Tweet</th><th>URL clicks</th><th>Imp</th></tr></thead>
+  <tbody>
+    <tr><td>04/29</td><td>Livestream announcement w/ OpenZeppelin</td><td>123</td><td>9,527</td></tr>
+    <tr><td>05/19</td><td>PSE 38-team interview share</td><td>93</td><td>7,686</td></tr>
+    <tr><td>04/23</td><td>"What is Guardian" article</td><td>84</td><td>54,165</td></tr>
+    <tr><td>04/30</td><td>"We're live" stream link</td><td>79</td><td>2,703</td></tr>
+    <tr><td>05/27</td><td>Libra/Diem thesis (article)</td><td>70</td><td>18,163</td></tr>
+  </tbody>
+</table>
+
+<hr class="divider">
+
+<!-- ============ LINKEDIN ============ -->
+<h2 id="linkedin">LinkedIn</h2>
+
+<table>
+  <thead>
+    <tr><th>Period</th><th>Days</th><th>Posts</th><th>Imp/day</th><th>Clicks/day</th><th>ER</th><th>New followers/day</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Baseline (Mar 24 – Apr 22)</td><td>30</td><td>14</td><td>135</td><td>9.2</td><td>12.6%</td><td>2.67</td></tr>
+    <tr class="highlight"><td>Campaign (Apr 23 – Jun 5)</td><td>44</td><td>23</td><td>145</td><td>9.8</td><td>13.0%</td><td>2.50</td></tr>
+  </tbody>
+</table>
+
+<div class="callout red">
+  <strong>LinkedIn essentially didn't move.</strong> Daily impressions +7%, daily clicks +7%, ER flat. New followers per day actually slightly down. Page views down 33% (35.2 → 23.7/day). The Guardian narrative on LinkedIn worked at the post level — a few standouts hit huge ER — but didn't compound into account-level lift.
+</div>
+
+<h3>Top campaign LI posts</h3>
+<table>
+  <thead><tr><th>Date</th><th>Post</th><th>Imp</th><th>Clicks</th><th>ER</th></tr></thead>
+  <tbody>
+    <tr><td>06/02</td><td>Guardian Operators (main)</td><td>1,173</td><td>32</td><td>5.9%</td></tr>
+    <tr><td>06/02</td><td>Guardian Operators — Gateway spotlight</td><td>632</td><td>30</td><td>10.3%</td></tr>
+    <tr><td>05/05</td><td>Privacy Salon Miami recap</td><td>378</td><td><strong style="color:var(--green)">93</strong></td><td><strong style="color:var(--green)">32%</strong></td></tr>
+    <tr><td>04/23</td><td>"Privacy + coordination problem"</td><td>369</td><td>13</td><td>11.1%</td></tr>
+    <tr><td>05/12</td><td>"Privacy paradox" explainer</td><td>251</td><td><strong style="color:var(--green)">99</strong></td><td><strong style="color:var(--green)">45.8%</strong></td></tr>
+    <tr><td>05/28</td><td>"Custody paradox" Video</td><td>224</td><td>20</td><td>17.4%</td></tr>
+  </tbody>
+</table>
+<p style="font-size:11px;color:var(--muted);margin-top:4px;">Note: substance-first explainer/recap posts hit 32–46% ER (May 5, May 12) — far higher than announcement-style content.</p>
+
+<h3>Audience: Visitors vs Followers (90-day window)</h3>
+<div class="two-col">
+  <div class="demo-card">
+    <div class="demo-title">Industry — Followers</div>
+    <div class="hbar-row"><div class="hbar-name">Software Dev</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:100%"></div><span class="hbar-val">152</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">IT Services</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:76%"></div><span class="hbar-val">115</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Financial Svc</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:70%"></div><span class="hbar-val" style="color:var(--green);font-weight:600">107 · #3</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Tech / Internet</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:68%"></div><span class="hbar-val">104</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Blockchain</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:60%"></div><span class="hbar-val">91</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Industry — Visitors</div>
+    <div class="hbar-row"><div class="hbar-name">Blockchain</div><div class="hbar-track"><div class="hbar-fill amber" style="width:100%"></div><span class="hbar-val">364</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Financial Svc</div><div class="hbar-track"><div class="hbar-fill amber" style="width:86%"></div><span class="hbar-val" style="color:var(--green);font-weight:600">312 · #2</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Software Dev</div><div class="hbar-track"><div class="hbar-fill amber" style="width:84%"></div><span class="hbar-val">304</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">IT Services</div><div class="hbar-track"><div class="hbar-fill amber" style="width:82%"></div><span class="hbar-val">300</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Tech / Internet</div><div class="hbar-track"><div class="hbar-fill amber" style="width:72%"></div><span class="hbar-val">261</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Seniority — Followers</div>
+    <div class="hbar-row"><div class="hbar-name">Senior</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:100%"></div><span class="hbar-val">330</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Entry</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:74%"></div><span class="hbar-val">243</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Director</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:27%"></div><span class="hbar-val">89</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Owner</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:27%"></div><span class="hbar-val">89</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">CXO</div><div class="hbar-track"><div class="hbar-fill cyan" style="width:19%"></div><span class="hbar-val">63</span></div></div>
+  </div>
+  <div class="demo-card">
+    <div class="demo-title">Seniority — Visitors</div>
+    <div class="hbar-row"><div class="hbar-name">Senior</div><div class="hbar-track"><div class="hbar-fill amber" style="width:100%"></div><span class="hbar-val">736</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Entry</div><div class="hbar-track"><div class="hbar-fill amber" style="width:98%"></div><span class="hbar-val">721</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Director</div><div class="hbar-track"><div class="hbar-fill amber" style="width:29%"></div><span class="hbar-val">217</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">Owner</div><div class="hbar-track"><div class="hbar-fill amber" style="width:27%"></div><span class="hbar-val">199</span></div></div>
+    <div class="hbar-row"><div class="hbar-name">CXO</div><div class="hbar-track"><div class="hbar-fill amber" style="width:24%"></div><span class="hbar-val">180</span></div></div>
+  </div>
+</div>
+
+<p class="callout amber" style="margin-top:14px;">
+<strong>Financial Services moved from #4 to #3 among followers</strong> (94 → 107) but it's still significantly under-indexed vs visitor traffic (#2, 312 views). The target audience is checking the page in roughly the right proportion — they're not converting.
+</p>
+
+<hr class="divider">
+
+<!-- ============ LESSONS ============ -->
+<h2 id="lessons">Lessons for Future Campaigns</h2>
+
+<div class="callout green">
+<strong>What worked:</strong>
+<ul class="tight" style="margin-top:8px;">
+<li><strong>Discrete product/news anchors drive most of the reach.</strong> 7 of the top 10 X tweets in 44 days hit 15K+ — they were: the launch article, the mainnet tease, the Operators announcement, episode launches with named guests, the Libra/Diem thesis. Abstract narrative tweets averaged 3–5K.</li>
+<li><strong>The Privacy Podcast became a reliable reach engine.</strong> Three episodes hit 13K, 24K, 41K impressions. Anchored content with named guests outperformed everything else over the full window.</li>
+<li><strong>Substance-first LinkedIn explainers are the highest-leverage format.</strong> May 12 paradox post (46% ER, 99 clicks) and May 5 Salon recap (32% ER, 93 clicks) are the all-time top LI posts. Every campaign should produce 2–3 of these.</li>
+</ul>
+</div>
+
+<div class="callout red">
+<strong>What didn't:</strong>
+<ul class="tight" style="margin-top:8px;">
+<li><strong>The campaign didn't grow the audience.</strong> X followers net −41 during the campaign (slowed from −203 baseline). LI followers per day flat (2.5 vs 2.67). The reach went to people who didn't follow afterwards.</li>
+<li><strong>LinkedIn page views dropped 33%</strong> (35.2 → 23.7/day) despite feed reach being flat-to-up. The campaign content didn't drive people to the page itself.</li>
+<li><strong>Pure-narrative tweets underperformed by a wide margin.</strong> Inspirational quotes and abstract thesis tweets averaged 2–4K impressions; tweets pointing to concrete substance (livestream, article, partner, episode) averaged 10K+.</li>
+<li><strong>44 days may be too long.</strong> Reach was lumpy — concentrated in 4–5 moments (launch article, livestream, two podcast eps, Operators). The space between moments diluted attention without compounding it.</li>
+</ul>
+</div>
+
+<div class="callout amber">
+<strong>Principles for the Wallet campaign:</strong>
+<ul class="tight" style="margin-top:8px;">
+<li><strong>Anchor on news beats, not narrative.</strong> Plan 4–5 discrete "we shipped X" / "Y joined" / "here's how it works" moments in advance — those are the only things that consistently hit 15K+ on X. Narrative wraps around them; it can't carry them alone.</li>
+<li><strong>Solve the follower conversion problem.</strong> A campaign that doubles reach but loses followers means the bio, pinned content, and follow-up content aren't doing their job. Update the X and LinkedIn pages before Wallet launches so new visitors have a reason to follow.</li>
+<li><strong>Front-load LinkedIn explainers.</strong> The paradox + Salon posts prove the format works. Plan 3+ "how it works / why it matters" LI posts for the Wallet window.</li>
+<li><strong>Tighten the window.</strong> Consider a 2–3 week core campaign window with the major beats clustered, then trail off — instead of the 6-week Guardian arc where attention dispersed.</li>
+</ul>
+</div>
+
+</body>
+</html>
